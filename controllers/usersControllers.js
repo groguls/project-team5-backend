@@ -7,7 +7,7 @@ const { HttpError, decorateConrtoller } = require("../utils/index.js");
 const createUserToken = require("../helpers/createUserToken.js");
 
 const signup = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { email, password } = req.body;
 
   const user = await User.findOne({ email });
 
@@ -33,7 +33,6 @@ const signup = async (req, res) => {
   res.status(201).json({
     token,
     user: {
-      name,
       email: newUser.email,
       avatarURL,
       waterRate,
@@ -60,12 +59,9 @@ const signin = async (req, res) => {
 
   await User.findByIdAndUpdate(user._id, { token });
 
-  const { name } = user;
-
   res.json({
     token,
     user: {
-      name,
       email,
       avatarURL: user.avatarURL,
       waterRate: user.waterRate,
@@ -74,9 +70,9 @@ const signin = async (req, res) => {
 };
 
 const getCurrent = (req, res) => {
-  const { name, email, avatarURL, waterRate } = req.user;
+  const { email, avatarURL, waterRate } = req.user;
 
-  res.json({ name, email, avatarURL, waterRate });
+  res.json({ email, avatarURL, waterRate });
 };
 
 const logout = async (req, res) => {

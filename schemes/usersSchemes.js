@@ -4,10 +4,6 @@ const emailRegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const genderList = ["Girl", "Man"];
 
 const userSignupSchema = Joi.object({
-  name: Joi.string().min(2).max(40).messages({
-    "string.min": "Name must be at least 2 characters long",
-    "string.max": "Name must be max 40 characters long",
-  }),
   email: Joi.string().pattern(emailRegExp).required().messages({
     "any.required": "Missing required email field",
     "string.pattern.base": "Invalid email format",
