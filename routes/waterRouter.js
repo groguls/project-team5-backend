@@ -8,6 +8,7 @@ const {
   editWater,
   getMonthWater,
 } = require("../controllers");
+const { addWaterSchema } = require("../models");
 
 const waterRouter = express.Router();
 
@@ -15,7 +16,7 @@ waterRouter
   .route("/")
   .all(authVerification)
   .get(getTodayWater)
-  .post(validateData(), addWater);
+  .post(validateData(addWaterSchema), addWater);
 
 waterRouter
   .route("/:recordId")

@@ -1,7 +1,8 @@
 const { User } = require("./User");
-const { Water } = require("./Water");
+const { WaterNote, addWaterSchema } = require("./Water");
 
 module.exports = {
   User,
-  Water,
+  WaterNote,
+  addWaterSchema,
 };

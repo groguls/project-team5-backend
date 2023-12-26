@@ -1,15 +1,16 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
+const { preUpdateHook } = require("./hooks");
 
 const waterSchema = new Schema(
   {
-    amount: {
+    waterVolume: {
       type: Number,
       required: [true, "Enter the value of the water used"],
-      min: [0, "Values in the range 0 to 5000"],
-      max: [5000, "Values in the range 0 to 5000"],
+      min: [1, "Values in the range 1 to 5000"],
+      max: [5000, "Values in the range 1 to 5000"],
     },
-    recordingTime: {
+    date: {
       type: Date,
       required: [true, "Set recording time"],
     },
@@ -22,8 +23,26 @@ const waterSchema = new Schema(
   { versionKey: false }
 );
 
-const Water = model("water", waterSchema);
+waterSchema.pre("findOneAndUpdate", preUpdateHook);
+
+const addWaterSchema = Joi.object({
+  waterVolume: Joi.number().integer().positive().max(5000).required().messages({
+    "any.required": "missing required {#label} field",
+    positive: "positive values between 1 and 5000 are allowed",
+    max: "positive values between 1 and 5000 are allowed",
+  }),
+  date: Joi.string()
+    .regex(/^\d{2}:\d{2}$/)
+    .required()
+    .messages({
+      "any.required": "missing required {#label} field",
+      "string.pattern.base": "Invalid time format. 'HH:mm' expected",
+    }),
+}).and("waterVolume", "date");
+
+const WaterNote = model("waterNote", waterSchema);
 
 module.exports = {
-  Water,
+  WaterNote,
+  addWaterSchema,
 };

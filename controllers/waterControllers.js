@@ -13,7 +13,7 @@ const getTodayWater = decorateConrtoller(async (req, res) => {
 });
 
 const getMonthWater = decorateConrtoller(async (req, res) => {
-  const result = await getMonthWaterService(req.user._id, req.query);
+  const result = await getMonthWaterService(req.user._id, req.params.month);
   res.json(result);
 });
 
