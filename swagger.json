@@ -173,11 +173,6 @@
         "type": "object",
         "required": ["email", "password"],
         "properties": {
-          "name": {
-            "type": "string",
-            "description": "User's name",
-            "example": "User Name"
-          },
           "email": {
             "type": "string",
             "description": "User's email",
@@ -197,11 +192,6 @@
           "user": {
             "type": "object",
             "properties": {
-              "name": {
-                "type": "string",
-                "description": "User's name",
-                "example": "User Name"
-              },
               "email": {
                 "type": "string",
                 "description": "User's email",
@@ -240,11 +230,6 @@
           "user": {
             "type": "object",
             "properties": {
-              "name": {
-                "type": "string",
-                "description": "User's name",
-                "example": "User Name"
-              },
               "email": {
                 "type": "string",
                 "description": "User's email",
@@ -263,11 +248,6 @@
       "GetCurrentResponse": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "description": "User's name",
-            "example": "User Name"
-          },
           "email": {
             "type": "string",
             "description": "User's email",
