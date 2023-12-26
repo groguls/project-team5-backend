@@ -1,3 +1,3 @@
-const { userSignupSchema, userSigninSchema } = require("./authSchemes.js");
+const { userSignupSchema, userSigninSchema } = require("./usersSchemes.js");
 
 module.exports = { userSignupSchema, userSigninSchema };
