@@ -113,10 +113,19 @@ const updateAvatar = async (req, res) => {
   });
 };
 
+const settings = async (req, res) => {
+  const { body, user } = req;
+
+  const updatedUser = await User.findByIdAndUpdate(user._id, body);
+
+  res.json(updatedUser);
+};
+
 module.exports = {
   signup: decorateConrtoller(signup),
   signin: decorateConrtoller(signin),
   getCurrent: decorateConrtoller(getCurrent),
   logout: decorateConrtoller(logout),
   updateAvatar: decorateConrtoller(updateAvatar),
+  settings: decorateConrtoller(settings),
 };

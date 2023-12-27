@@ -165,6 +165,47 @@
           }
         }
       }
+    },
+    "/users/settings": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "User update",
+        "parameters": [],
+        "requestBody": {
+          "description": "Object with updated data",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettingsRequest"
+              }
+            }
+          }
+        },
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "The user is updated",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SettingsResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
     }
   },
   "components": {
@@ -252,6 +293,54 @@
             "type": "string",
             "description": "User's email",
             "format": "email"
+          },
+          "avatarURL": {
+            "type": "string",
+            "description": "User avatar path",
+            "example": "avatars\\436abd4ceb7a0467af393b67_avatar.jpg"
+          },
+          "waterRate": { "type": "integer", "example": 2000 }
+        }
+      },
+      "SettingsRequest": {
+        "type": "object",
+        "required": [],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "User Name"
+          },
+          "gender": {
+            "type": "string",
+            "description": "User's gender",
+            "format": ["man", "girl"],
+            "example": "man"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "SettingsResponse": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "User Name"
           },
           "avatarURL": {
             "type": "string",
