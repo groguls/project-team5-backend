@@ -1,7 +1,7 @@
 const Joi = require("joi");
 
 const emailRegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const genderList = ["Girl", "Man"];
+const genderList = ["girl", "man"];
 
 const userSignupSchema = Joi.object({
   email: Joi.string().pattern(emailRegExp).required().messages({
@@ -27,7 +27,7 @@ const userSigninSchema = Joi.object({
   }),
 });
 
-const userUpdateSchema = Joi.object({
+const userSettingsSchema = Joi.object({
   name: Joi.string().min(2).max(40).messages({
     "string.min": "Name must be at least 2 characters long",
     "string.max": "Name must be max 40 characters long",
@@ -45,5 +45,5 @@ const userUpdateSchema = Joi.object({
 module.exports = {
   userSignupSchema,
   userSigninSchema,
-  userUpdateSchema,
+  userSettingsSchema,
 };

@@ -1,8 +1,9 @@
 const Joi = require("joi");
 const { Schema, model } = require("mongoose");
+const { preUpdateHook, handleSaveError } = require("./hooks");
 
 const emailRegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const genderList = ["Girl", "Man"];
+const genderList = ["girl", "man"];
 
 const userSchema = new Schema(
   {
@@ -38,6 +39,10 @@ const userSchema = new Schema(
   },
   { versionKey: false }
 );
+
+userSchema.post("save", handleSaveError);
+userSchema.pre("findOneAndUpdate", preUpdateHook);
+userSchema.post("findOneAndUpdate", handleSaveError);
 
 const User = model("user", userSchema);
 

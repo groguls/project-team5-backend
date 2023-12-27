@@ -5,13 +5,14 @@ const {
   getCurrent,
   logout,
   updateAvatar,
+  settings,
 } = require("../controllers/usersControllers");
 const { validateData } = require("../utils");
 const { authVerification, isEmptyBody, upload } = require("../middlewares");
 const {
   userSignupSchema,
   userSigninSchema,
-  userUpdateSchema,
+  userSettingsSchema,
 } = require("../schemes");
 
 const authRouter = express.Router();
@@ -29,6 +30,13 @@ authRouter.patch(
   authVerification,
   upload.single("avatarURL"),
   updateAvatar
+);
+
+authRouter.patch(
+  "/settings",
+  authVerification,
+  validateData(userSettingsSchema),
+  settings
 );
 
 module.exports = authRouter;
