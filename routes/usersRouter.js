@@ -6,6 +6,7 @@ const {
   logout,
   updateAvatar,
   settings,
+  updateWaterRate,
 } = require("../controllers/usersControllers");
 const { validateData } = require("../utils");
 const { authVerification, isEmptyBody, upload } = require("../middlewares");
@@ -13,6 +14,7 @@ const {
   userSignupSchema,
   userSigninSchema,
   userSettingsSchema,
+  userUpdateWaterRateSchema,
 } = require("../schemes");
 
 const authRouter = express.Router();
@@ -37,6 +39,13 @@ authRouter.patch(
   authVerification,
   validateData(userSettingsSchema),
   settings
+);
+
+authRouter.patch(
+  "/waterRate",
+  authVerification,
+  validateData(userUpdateWaterRateSchema),
+  updateWaterRate
 );
 
 module.exports = authRouter;
