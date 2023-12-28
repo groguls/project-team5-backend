@@ -14,6 +14,10 @@
   "servers": [{ "url": "http://localhost:5000" }],
   "tags": [
     {
+      "name": "Auth",
+      "description": "Auth endpoints"
+    },
+    {
       "name": "User",
       "description": "User endpoints"
     },
@@ -25,7 +29,7 @@
   "paths": {
     "/users/signup": {
       "post": {
-        "tags": ["User"],
+        "tags": ["Auth"],
         "summary": "User registration",
         "parameters": [],
         "requestBody": {
@@ -65,7 +69,7 @@
     },
     "/users/signin": {
       "post": {
-        "tags": ["User"],
+        "tags": ["Auth"],
         "summary": "User login",
         "parameters": [],
         "requestBody": {
@@ -94,6 +98,35 @@
           },
           "401": {
             "description": "Invalid email or password",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User logout",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string",
+            "description": "The token issued to the current user"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "The user is logged out"
+          },
+          "401": {
+            "description": "Not authorized",
             "content": {}
           },
           "500": {
@@ -137,23 +170,43 @@
         }
       }
     },
-    "/users/logout": {
-      "post": {
+    "/users/avatars": {
+      "patch": {
         "tags": ["User"],
-        "summary": "User logout",
+        "summary": "Update user's avatar",
         "parameters": [
           {
-            "in": "header",
-            "name": "Authorization",
-            "required": true,
-            "type": "string",
-            "description": "The token issued to the current user"
+            "in": "formData",
+            "name": "avatarURL",
+            "type": "file",
+            "description": "The file to upload",
+            "required": true
           }
         ],
+        "requestBody": {
+          "description": "File",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/AvatarsRequest"
+              }
+            }
+          }
+        },
         "security": [{ "Bearer": [] }],
         "responses": {
-          "204": {
-            "description": "The user is logged out"
+          "200": {
+            "description": "The user's avatar is updated",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AvatarsResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (missing required avatarURL)",
+            "content": {}
           },
           "401": {
             "description": "Not authorized",
@@ -169,7 +222,7 @@
     "/users/settings": {
       "patch": {
         "tags": ["User"],
-        "summary": "User update",
+        "summary": "Update user's data",
         "parameters": [],
         "requestBody": {
           "description": "Object with updated data",
@@ -189,6 +242,49 @@
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/SettingsResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/waterRate": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Update user's water rate",
+        "parameters": [],
+        "requestBody": {
+          "description": "Object with updated rate",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWaterRateRequest"
+              }
+            }
+          }
+        },
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "The user is updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateWaterRateResponse"
+                }
               }
             }
           },
@@ -229,7 +325,16 @@
       "SignupResponse": {
         "type": "object",
         "properties": {
-          "token": { "type": "string", "description": "Bearer token" },
+          "_id": {
+            "type": "string",
+            "description": "Backend-generated unique identifier",
+            "example": "346t7o5687g848eababc0c16"
+          },
+          "token": {
+            "type": "string",
+            "description": "Bearer token",
+            "example": "feJhbGciOiJIUzI1NiIsInR5cCI6IgtXVCJ4.eyJpZCI6IjY1OGQ3MTZiMGZiOGY0ZWE3MTgxYjE1ZCIsImlhdCI6MTcwMzc2OTM3OSwiZXhwIjoxNzA0Mzc0MTc3fQ.a0btrlNeqem40KjOgtWSPVscL9KNz8kIGlIHeh0Ersw"
+          },
           "user": {
             "type": "object",
             "properties": {
@@ -243,7 +348,11 @@
                 "description": "User avatar path",
                 "example": "avatars\\436abd4ceb7a0467af393b67_avatar.jpg"
               },
-              "waterRate": { "type": "integer", "example": 2000 }
+              "waterRate": {
+                "type": "integer",
+                "description": "User's water rate",
+                "example": 2000
+              }
             }
           }
         }
@@ -267,7 +376,16 @@
       "SigninResponse": {
         "type": "object",
         "properties": {
-          "token": { "type": "string", "description": "Bearer token" },
+          "_id": {
+            "type": "string",
+            "description": "Backend-generated unique identifier",
+            "example": "346t7o5687g848eababc0c16"
+          },
+          "token": {
+            "type": "string",
+            "description": "Bearer token",
+            "example": "feJhbGciOiJIUzI1NiIsInR5cCI6IgtXVCJ4.eyJpZCI6IjY1OGQ3MTZiMGZiOGY0ZWE3MTgxYjE1ZCIsImlhdCI6MTcwMzc2OTM3OSwiZXhwIjoxNzA0Mzc0MTc3fQ.a0btrlNeqem40KjOgtWSPVscL9KNz8kIGlIHeh0Ersw"
+          },
           "user": {
             "type": "object",
             "properties": {
@@ -281,7 +399,11 @@
                 "description": "User avatar path",
                 "example": "avatars\\436abd4ceb7a0467af393b67_avatar.jpg"
               },
-              "waterRate": { "type": "integer", "example": 2000 }
+              "waterRate": {
+                "type": "integer",
+                "description": "User's water rate",
+                "example": 2000
+              }
             }
           }
         }
@@ -299,7 +421,26 @@
             "description": "User avatar path",
             "example": "avatars\\436abd4ceb7a0467af393b67_avatar.jpg"
           },
-          "waterRate": { "type": "integer", "example": 2000 }
+          "waterRate": {
+            "type": "integer",
+            "description": "User's water rate",
+            "example": 2000
+          }
+        }
+      },
+      "AvatarsRequest": {
+        "type": "string",
+        "description": "User avatar file",
+        "format": "binary"
+      },
+      "AvatarsResponse": {
+        "type": "object",
+        "properties": {
+          "avatarURL": {
+            "type": "string",
+            "description": "User avatar path",
+            "example": "avatars\\436abd4ceb7a0467af393b67_avatar.jpg"
+          }
         }
       },
       "SettingsRequest": {
@@ -347,7 +488,32 @@
             "description": "User avatar path",
             "example": "avatars\\436abd4ceb7a0467af393b67_avatar.jpg"
           },
-          "waterRate": { "type": "integer", "example": 2000 }
+          "waterRate": {
+            "type": "integer",
+            "description": "User's water rate",
+            "example": 2000
+          }
+        }
+      },
+      "UpdateWaterRateRequest": {
+        "type": "object",
+        "required": ["waterRate"],
+        "properties": {
+          "waterRate": {
+            "type": "integer",
+            "description": "User's water rate",
+            "example": 2000
+          }
+        }
+      },
+      "UpdateWaterRateResponse": {
+        "type": "object",
+        "properties": {
+          "waterRate": {
+            "type": "integer",
+            "description": "User's water rate",
+            "example": 2000
+          }
         }
       }
     },

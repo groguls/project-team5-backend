@@ -39,11 +39,20 @@ const userSettingsSchema = Joi.object({
     "string.min": "Password must be at least 8 characters long",
     "string.max": "Password must be max 64 characters long",
   }),
-  gender: Joi.string(),
+  gender: Joi.string().valid(...genderList),
+});
+
+const userUpdateWaterRateSchema = Joi.object({
+  waterRate: Joi.number().min(0).max(150000).required().messages({
+    "any.required": "Missing required waterRate field",
+    "number.min": "Values in the range 0 to 15000",
+    "number.max": "Values in the range 0 to 15000",
+  }),
 });
 
 module.exports = {
   userSignupSchema,
   userSigninSchema,
   userSettingsSchema,
+  userUpdateWaterRateSchema,
 };

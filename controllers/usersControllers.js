@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const path = require("path");
-const fs = require("fs/promises");
 const Jimp = require("jimp");
+const fs = require("fs/promises");
 const { User } = require("../models/index.js");
 const { HttpError, decorateConrtoller } = require("../utils/index.js");
 const createUserToken = require("../helpers/createUserToken.js");
@@ -85,12 +85,11 @@ const logout = async (req, res) => {
 
 const updateAvatar = async (req, res) => {
   if (!req.file) {
-    throw new HttpError(400, "Missing required avatarURL");
+    throw new HttpError(400, "missing required avatarURL");
   }
 
   const { _id } = req.user;
   const { path: oldPath, filename } = req.file;
-  const avatarPath = path.resolve("public", "avatars");
 
   await Jimp.read(oldPath)
     .then((file) => {
@@ -98,15 +97,14 @@ const updateAvatar = async (req, res) => {
     })
     .catch((error) => console.log(error.message));
 
+  const avatarPath = path.resolve("public", "avatars");
   const newPath = path.join(avatarPath, filename);
 
   await fs.rename(oldPath, newPath);
 
   const avatarURL = path.join("avatars", filename);
 
-  await User.findByIdAndUpdate(_id, {
-    avatarURL,
-  });
+  await User.findByIdAndUpdate(_id, { avatarURL });
 
   res.json({
     avatarURL,
@@ -121,6 +119,15 @@ const settings = async (req, res) => {
   res.json(updatedUser);
 };
 
+const updateWaterRate = async (req, res) => {
+  const { _id } = req.user;
+  const { waterRate } = req.body;
+
+  await User.findByIdAndUpdate(_id, { waterRate });
+
+  res.json({ waterRate });
+};
+
 module.exports = {
   signup: decorateConrtoller(signup),
   signin: decorateConrtoller(signin),
@@ -128,4 +135,5 @@ module.exports = {
   logout: decorateConrtoller(logout),
   updateAvatar: decorateConrtoller(updateAvatar),
   settings: decorateConrtoller(settings),
+  updateWaterRate: decorateConrtoller(updateWaterRate),
 };
