@@ -173,28 +173,26 @@
     "/users/avatars": {
       "patch": {
         "tags": ["User"],
-        "summary": "Update user's avatar",
-        "parameters": [
-          {
-            "in": "formData",
-            "name": "avatarURL",
-            "type": "file",
-            "description": "The file to upload",
-            "required": true
-          }
-        ],
+        "summary": "Add or update user avatar",
+        "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "File",
+          "description": "User avatar image",
           "required": true,
           "content": {
             "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/AvatarsRequest"
+                "type": "object",
+                "properties": {
+                  "avatarURL": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "User's avatar image file"
+                  }
+                }
               }
             }
           }
         },
-        "security": [{ "Bearer": [] }],
         "responses": {
           "200": {
             "description": "The user's avatar is updated",
