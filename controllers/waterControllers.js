@@ -23,7 +23,7 @@ const addWater = decorateConrtoller(async (req, res) => {
 });
 
 const editWater = decorateConrtoller(async (req, res) => {
-  const result = await updateContactByIdService(
+  const result = await editWaterService(
     req.user._id,
     req.params.recordId,
     req.body
