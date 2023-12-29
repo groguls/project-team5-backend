@@ -5,6 +5,10 @@ const {
   endOfDay,
   addMonths,
   subMonths,
+  getMonth,
+  getYear,
+  startOfMonth,
+  endOfMonth,
 } = require("date-fns");
 const { WaterNote, User } = require("../models");
 const { handleNotFoundId } = require("../utils");
@@ -34,29 +38,49 @@ const getTodayWaterService = async (user) => {
     },
     {
       $group: {
+        _id: null,
+        userId: { $first: "$user._id" },
+        date: {
+          $first: { $dateToString: { format: "%G-%m-%d", date: "$date" } },
+        },
+        totalWaterConsumed: { $sum: "$waterVolume" },
+        dailyWaterRate: { $first: "$user.waterRate" },
+        waterRecords: {
+          $push: {
+            waterVolume: "$waterVolume",
+            time: { $dateToString: { format: "%H:%M", date: "$date" } },
+          },
+        },
+      },
+    },
+    {
+      $project: {
         _id: 0,
+        userId: 1,
+        dailyWaterRate: 1,
+        date: 1,
         percentage: {
           $concat: [
             {
               $toString: {
-                $multiply: [
-                  { $divide: [{ $sum: "$waterVolume" }, "$user.waterRate"] },
-                  100,
+                $round: [
+                  {
+                    $multiply: [
+                      { $divide: ["$totalWaterConsumed", "$dailyWaterRate"] },
+                      100,
+                    ],
+                  },
+                  0,
                 ],
               },
             },
             "%",
           ],
         },
-        waterRecords: { $push: { waterVolume: "$waterVolume", date: "$date" } },
+        waterRecords: 1,
       },
     },
   ]);
-
-  // return await WaterNote.find({
-  //   user,
-  //   date: { $gte: todayStart, $lte: todayEnd },
-  // }).exec();
 };
 
 const getMonthWaterService = async (user, monthOffset) => {
@@ -84,7 +108,7 @@ const getMonthWaterService = async (user, monthOffset) => {
     },
     {
       $group: {
-        _id: { $dateToString: { format: "%d, %B", date: "$date" } },
+        _id: { $dateToString: { format: "%G-%m-%d", date: "$date" } },
         dailyWaterRate: { $first: "$user.waterRate" },
         totalWaterConsumed: { $sum: "$waterVolume" },
         entries: { $sum: 1 },
@@ -94,14 +118,24 @@ const getMonthWaterService = async (user, monthOffset) => {
       $project: {
         _id: 0,
         date: "$_id",
-        dailyWaterRate: $concat[({ $toString: "$dailyWaterRate" }, " L")],
+        dailyWaterRate: {
+          $concat: [
+            { $toString: { $divide: ["$dailyWaterRate", 1000] } },
+            " L",
+          ],
+        },
         percentage: {
           $concat: [
             {
               $toString: {
-                $multiply: [
-                  { $divide: ["$totalWaterConsumed", "$dailyWaterRate"] },
-                  100,
+                $round: [
+                  {
+                    $multiply: [
+                      { $divide: ["$totalWaterConsumed", "$dailyWaterRate"] },
+                      100,
+                    ],
+                  },
+                  0,
                 ],
               },
             },
@@ -112,36 +146,6 @@ const getMonthWaterService = async (user, monthOffset) => {
       },
     },
   ]);
-
-  // const waterInfo = await WaterNote.aggregate([
-  //   {
-  //     $match: {
-  //       user,
-  //       date: { $gte: startDate, $lte: endDate },
-  //     },
-  //   },
-  //   {
-  //     $group: {
-  //       _id: { $dateToString: { format: "%d, %B", date: "$date" } },
-  //       totalWaterConsumed: { $sum: "$waterVolume" },
-  //       entries: { $sum: 1 },
-  //     },
-  //   },
-  // ]);
-
-  // const { waterRate } = await User.findOne({ _id: user }, { waterRate: 1 });
-
-  // return waterInfo.map(({ _id, totalWaterConsumed, entries }) => {
-  //   const percentage =
-  //     ((totalWaterConsumed / waterRate) * 100).toFixed(2) + "%";
-
-  //   return {
-  //     date: _id,
-  //     dailyWaterRate: `${waterRate} L`,
-  //     percentage,
-  //     entries,
-  //   };
-  // });
 };
 
 const addWaterService = async (user, newRecord) => {
@@ -155,15 +159,20 @@ const addWaterService = async (user, newRecord) => {
 };
 
 const editWaterService = async (user, record, newData) => {
-  const editedRecord = WaterNote.findOne({ _id: record, user });
-  handleNotFoundId();
+  const editedRecord = await WaterNote.findOne({ _id: record, user });
+  handleNotFoundId(editedRecord, record);
 
   const { waterVolume, date } = newData;
-  const dateWithUserTimeIso = formatTimeToIso(date);
 
-  editedRecord.waterVolume = waterVolume;
-  editedRecord.date = dateWithUserTimeIso;
-  editedRecord.markModified("date");
+  if (waterVolume) {
+    editedRecord.waterVolume = waterVolume;
+  }
+  if (date) {
+    const dateWithUserTimeIso = formatTimeToIso(date);
+    editedRecord.date = dateWithUserTimeIso;
+    editedRecord.markModified("date");
+  }
+
   return await editedRecord.save();
 };
 
@@ -172,7 +181,7 @@ const deleteWaterService = async (user, record) => {
     _id: record,
     user,
   });
-  handleNotFoundId();
+  handleNotFoundId(recordToDelete, record);
   return recordToDelete;
 };
 
