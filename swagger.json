@@ -11,7 +11,7 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json", "multipart/form-data"],
-  "servers": [{ "url": "http://localhost:5000" }],
+  "servers": [{ "url": "https://watertracker-by-group5.onrender.com" }],
   "tags": [
     {
       "name": "Auth",

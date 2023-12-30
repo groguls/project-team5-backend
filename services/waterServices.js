@@ -3,10 +3,6 @@ const {
   formatISO,
   startOfDay,
   endOfDay,
-  addMonths,
-  subMonths,
-  getMonth,
-  getYear,
   startOfMonth,
   endOfMonth,
 } = require("date-fns");
@@ -83,8 +79,8 @@ const getTodayWaterService = async (user) => {
   ]);
 };
 
-const getMonthWaterService = async (user, monthOffset) => {
-  const { month, year } = calculateRelativeMonth(monthOffset);
+const getMonthWaterService = async (user, date) => {
+  const [year, month] = date.split("-").map(Number);
   const startDate = startOfMonth(new Date(year, month - 1));
   const endDate = endOfMonth(startDate);
 
@@ -183,28 +179,6 @@ const deleteWaterService = async (user, record) => {
   });
   handleNotFoundId(recordToDelete, record);
   return recordToDelete;
-};
-
-const calculateRelativeMonth = (monthOffset) => {
-  const currentDate = new Date();
-  const currentMonth = getMonth(currentDate);
-
-  let targetDate =
-    monthOffset > 0
-      ? addMonths(currentDate, monthOffset - currentMonth)
-      : subMonths(currentDate, Math.abs(monthOffset));
-
-  let targetMonth = getMonth(targetDate);
-  let targetYear = getYear(targetDate);
-
-  if (targetMonth < 0) {
-    targetMonth += 12;
-    targetYear -= 1;
-  } else if (targetMonth > 11) {
-    targetMonth -= 12;
-    targetYear += 1;
-  }
-  return { month: targetMonth + 1, year: targetYear };
 };
 
 const formatTimeToIso = (date) => {
