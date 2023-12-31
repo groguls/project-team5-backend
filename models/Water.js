@@ -40,9 +40,15 @@ const addWaterSchema = Joi.object({
     }),
 }).and("waterVolume", "date");
 
+const editWaterSchema = Joi.object({
+  waterVolume: addWaterSchema.extract("waterVolume"),
+  date: addWaterSchema.extract("date"),
+}).or("waterVolume", "date");
+
 const WaterNote = model("waterNote", waterSchema);
 
 module.exports = {
   WaterNote,
   addWaterSchema,
+  editWaterSchema,
 };
