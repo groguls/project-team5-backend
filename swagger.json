@@ -27,9 +27,7 @@
   "paths": {
     "/users/signup": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "User registration",
         "description": "Register new user",
         "requestBody": {
@@ -45,32 +43,23 @@
         },
         "responses": {
           "201": {
-            "description": "User successfully registered",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SignUpInRequest"
-                }
-              }
-            }
+            "$ref": "#/components/responses/SignUpInResponse"
           },
           "400": {
-            "description": "Bad request (invalid request body)"
+            "$ref": "#/components/responses/BadRequest"
           },
           "409": {
-            "description": "Email in use"
+            "$ref": "#/components/responses/EmailInUse"
           },
           "500": {
-            "description": "Server error"
+            "$ref": "#/components/responses/ServerError"
           }
         }
       }
     },
     "/users/signin": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "User login",
         "description": "Login existed user",
         "requestBody": {
@@ -86,46 +75,28 @@
         },
         "responses": {
           "200": {
-            "description": "The user is logged in",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SignUpInRequest"
-                }
-              }
-            }
+            "$ref": "#/components/responses/SignUpInResponse"
           },
           "400": {
-            "description": "Bad request (invalid request body)"
+            "$ref": "#/components/responses/BadRequest"
           },
           "401": {
-            "description": "Invalid email or password"
+            "$ref": "#/components/responses/InvalidCredentials"
           },
           "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error500"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ServerError"
           }
         }
       }
     },
     "/users/logout": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "User logout",
         "description": "Logout existed user",
         "security": [
           {
-            "Bearer": [
-              null
-            ]
+            "Bearer": []
           }
         ],
         "responses": {
@@ -133,88 +104,45 @@
             "description": "The user is logged out"
           },
           "401": {
-            "description": "Not authorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error401"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Unauthorized"
           },
           "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error500"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ServerError"
           }
         }
       }
     },
     "/users/current": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "summary": "Get information about the current user",
         "description": "Get information about the current user",
         "security": [
           {
-            "Bearer": [
-              null
-            ]
+            "Bearer": []
           }
         ],
         "responses": {
           "200": {
-            "description": "Information about user found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
+            "$ref": "#/components/responses/CurrentUserResponse"
           },
           "401": {
-            "description": "Not authorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error401"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Unauthorized"
           },
           "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error500"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ServerError"
           }
         }
       }
     },
     "/users/avatars": {
       "patch": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "summary": "Add or update user avatar",
         "description": "Add or update user avatar",
         "security": [
           {
-            "Bearer": [
-              null
-            ]
+            "Bearer": []
           }
         ],
         "requestBody": {
@@ -237,53 +165,28 @@
         },
         "responses": {
           "200": {
-            "description": "The user's avatar is updated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AvatarsResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/AvatarsResponse"
           },
           "400": {
-            "description": "Bad request (invalid request body)"
+            "$ref": "#/components/responses/BadRequest"
           },
           "401": {
-            "description": "Not authorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error401"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Unauthorized"
           },
           "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error500"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ServerError"
           }
         }
       }
     },
     "/users/settings": {
       "patch": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "summary": "Update user's data",
         "description": "Update user's data",
         "security": [
           {
-            "Bearer": [
-              null
-            ]
+            "Bearer": []
           }
         ],
         "requestBody": {
@@ -291,7 +194,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/UserSettings"
               }
             }
           },
@@ -299,53 +202,28 @@
         },
         "responses": {
           "200": {
-            "description": "The user is updated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UserSettingsResponse"
           },
           "400": {
-            "description": "Bad request (invalid request body)"
+            "$ref": "#/components/responses/BadRequest"
           },
           "401": {
-            "description": "Not authorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error401"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Unauthorized"
           },
           "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error500"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ServerError"
           }
         }
       }
     },
     "/users/waterRate": {
       "patch": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["User"],
         "summary": "Update user's water data",
         "description": "Update user's water data",
         "security": [
           {
-            "Bearer": [
-              null
-            ]
+            "Bearer": []
           }
         ],
         "requestBody": {
@@ -361,46 +239,23 @@
         },
         "responses": {
           "200": {
-            "description": "The user is updated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UpdateWaterRateResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UpdateWaterRateResponse"
           },
           "400": {
-            "description": "Bad request (invalid request body)"
+            "$ref": "#/components/responses/BadRequest"
           },
           "401": {
-            "description": "Not authorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error401"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Unauthorized"
           },
           "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error500"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ServerError"
           }
         }
       }
     },
     "/api/water": {
       "post": {
-        "tags": [
-          "Water"
-        ],
+        "tags": ["Water"],
         "summary": "Add water consumption record",
         "description": "Add water volume and time of consumption",
         "requestBody": {
@@ -416,99 +271,54 @@
         },
         "security": [
           {
-            "Bearer": [
-              null
-            ]
+            "Bearer": []
           }
         ],
         "responses": {
           "201": {
-            "description": "The record was successfully created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AddWaterResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/AddEditWaterResponse"
           },
           "400": {
-            "description": "Bad request (invalid request body)"
+            "$ref": "#/components/responses/BadRequest"
           },
           "401": {
-            "description": "Not authorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error401"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Unauthorized"
           },
           "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error500"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ServerError"
           }
         }
       },
       "get": {
-        "tags": [
-          "Water"
-        ],
+        "tags": ["Water"],
         "summary": "Get water records for today",
         "description": "Returns the user's water records for today from the database",
         "security": [
           {
-            "Bearer": [
-              null
-            ]
+            "Bearer": []
           }
         ],
         "responses": {
           "200": {
-            "description": "Successfully get water records"
+            "$ref": "#/components/responses/TodayWaterResponse"
           },
           "401": {
-            "description": "Not authorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error401"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Unauthorized"
           },
           "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error500"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ServerError"
           }
         }
       }
     },
     "/api/water/{month}": {
       "get": {
-        "tags": [
-          "Water"
-        ],
+        "tags": ["Water"],
         "summary": "Get water records for requested month",
         "description": "Returns the user's water records for for requested month from the database",
         "security": [
           {
-            "Bearer": [
-              null
-            ]
+            "Bearer": []
           }
         ],
         "parameters": [
@@ -519,44 +329,26 @@
             "required": true,
             "schema": {
               "type": "string",
-              "examples": [
-                "2023-12"
-              ]
+              "examples": ["2023-12"]
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successfully get water records"
+            "$ref": "#/components/responses/MonthWaterResponse"
           },
           "401": {
-            "description": "Not authorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error401"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Unauthorized"
           },
           "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error500"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ServerError"
           }
         }
       }
     },
     "/api/water/{recordId}": {
       "patch": {
-        "tags": [
-          "Water"
-        ],
+        "tags": ["Water"],
         "summary": "Edit water consumption record",
         "description": "Edit water volume and/or time of consumption",
         "requestBody": {
@@ -572,120 +364,384 @@
         },
         "security": [
           {
-            "Bearer": [
-              null
-            ]
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "recordId",
+            "in": "path",
+            "description": "Record ID in database",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "examples": ["658eabae4f2cacdd1d946926"]
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successfully edit water records",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AddWaterResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/AddEditWaterResponse"
           },
           "400": {
-            "description": "Bad request (invalid request body)"
+            "$ref": "#/components/responses/BadRequest"
           },
           "401": {
-            "description": "Not authorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error401"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Unauthorized"
           },
           "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error500"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ServerError"
           }
         }
       },
       "delete": {
-        "tags": [
-          "Water"
-        ],
+        "tags": ["Water"],
         "summary": "Delete water record",
         "description": "Delete water records by ID from the database",
         "security": [
           {
-            "Bearer": [
-              null
-            ]
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "recordId",
+            "in": "path",
+            "description": "Record ID in database",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "examples": ["658eabae4f2cacdd1d946926"]
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successfully delete water records",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeleteWaterResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/DeleteWaterResponse"
           },
           "401": {
-            "description": "Not authorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error401"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Unauthorized"
           },
           "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error500"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ServerError"
           }
         }
       }
     }
   },
   "components": {
+    "responses": {
+      "Unauthorized": {
+        "description": "User must be logged in to perfotm this action (401)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "examples": ["Not authorized"]
+                }
+              }
+            }
+          }
+        }
+      },
+      "InvalidCredentials": {
+        "description": "Invalid email or password (401)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "examples": ["Invalid email or password"]
+                }
+              }
+            }
+          }
+        }
+      },
+      "EmailInUse": {
+        "description": "Email in use (409)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "examples": ["Email in use"]
+                }
+              }
+            }
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Server error (500)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "examples": ["Server error"]
+                }
+              }
+            }
+          }
+        }
+      },
+      "BadRequest": {
+        "description": "Bad request - invalid request body (400)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SignUpInResponse": {
+        "description": "User successfully registered/logged in",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "Backend-generated unique identifier",
+                  "examples": ["346t7o5687g848eababc0c16"]
+                },
+                "token": {
+                  "type": "string",
+                  "description": "Bearer token",
+                  "examples": [
+                    "feJhbGciOiJIUzI1NiIsInR5cCI6IgtXVCJ4.eyJpZCI6IjY1OGQ3MTZiMGZiOGY0ZWE3MTgxYjE1ZCIsImlhdCI6MTcwMzc2OTM3OSwiZXhwIjoxNzA0Mzc0MTc3fQ.a0btrlNeqem40KjOgtWSPVscL9KNz8kIGlIHeh0Ersw"
+                  ]
+                },
+                "user": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      },
+      "CurrentUserResponse": {
+        "description": "Information about user",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "UserSettingsResponse": {
+        "description": "Information about user",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UserSettings"
+            }
+          }
+        }
+      },
+      "AvatarsResponse": {
+        "description": "The user's avatar is updated",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "description": "User avatar file",
+              "properties": {
+                "avatarURL": {
+                  "type": "string",
+                  "description": "User avatar path",
+                  "examples": ["avatars\\436abd4ceb7a0467af393b67_avatar.jpg"]
+                }
+              }
+            }
+          }
+        }
+      },
+      "UpdateWaterRateResponse": {
+        "description": "The user is updated",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "waterRate": {
+                  "type": "integer",
+                  "description": "User's water rate",
+                  "examples": [2000]
+                }
+              }
+            }
+          }
+        }
+      },
+      "AddEditWaterResponse": {
+        "description": "The record was successfully created/edited",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "waterVolume": {
+                  "type": "integer",
+                  "description": "The amount of water added to the database",
+                  "examples": [150]
+                },
+                "date": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Time of consumption added",
+                  "examples": ["2023-12-29T15:12:15.000Z"]
+                },
+                "user": {
+                  "type": "string",
+                  "description": "User ID for reference",
+                  "examples": ["658c5398e3e9eefd204b132f"]
+                },
+                "_id": {
+                  "type": "string",
+                  "description": "Record ID",
+                  "examples": ["658eabae4f2cacdd1d946926"]
+                }
+              }
+            }
+          }
+        }
+      },
+      "TodayWaterResponse": {
+        "description": "Successfully get water records for today",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Records of water consumption for the user for today",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string",
+                    "description": "User ID",
+                    "examples": ["658c5398e3e9eefd204b132f"]
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "The date for which the data was selected",
+                    "examples": ["2023-12-29T00:00:00.000Z"]
+                  },
+                  "dailyWaterRate": {
+                    "type": "integer",
+                    "description": "User's water rate in ml",
+                    "examples": [2000]
+                  },
+                  "percentage": {
+                    "type": "string",
+                    "description": "Percentage of fulfillment of the daily consumption rate",
+                    "examples": ["49%"]
+                  },
+                  "waterRecords": {
+                    "type": "array",
+                    "description": "List of records for today",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "description": "Record ID",
+                          "examples": ["658eabae4f2cacdd1d946926"]
+                        },
+                        "waterVolume": {
+                          "type": "integer",
+                          "description": "The amount of water consumed in ml",
+                          "examples": [150]
+                        },
+                        "time": {
+                          "type": "string",
+                          "format": "time",
+                          "description": "Time of consumption",
+                          "examples": ["12:00"]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "MonthWaterResponse": {
+        "description": "Successfully get water records",
+        "content": {
+          "application/json": {
+            "schema": {
+              "description": "Records of water consumption for the user for selected month",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "entries": {
+                    "type": "integer",
+                    "description": "Number of records of water consumption per day",
+                    "examples": [5]
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "The date for which the data was selected",
+                    "examples": ["2023-12-29T00:00:00.000Z"]
+                  },
+                  "dailyWaterRate": {
+                    "type": "integer",
+                    "description": "User's water rate in liters",
+                    "examples": ["1.8L"]
+                  },
+                  "percentage": {
+                    "type": "string",
+                    "description": "Percentage of fulfillment of the daily consumption rate",
+                    "examples": ["49%"]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "DeleteWaterResponse": {
+        "description": "Successfully delete water records",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "examples": ["Record deleted"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "schemas": {
-      "Error401": {
-        "description": "User must be logged in to perfotm this action",
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "examples": [
-              "Not authorized"
-            ]
-          }
-        }
-      },
-      "Error500": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "examples": [
-              "Server error"
-            ]
-          }
-        }
-      },
       "User": {
         "type": "object",
         "properties": {
@@ -697,53 +753,51 @@
           "avatarURL": {
             "type": "string",
             "description": "User avatar path",
-            "examples": [
-              "avatars\\436abd4ceb7a0467af393b67_avatar.jpg"
-            ]
+            "examples": ["avatars\\436abd4ceb7a0467af393b67_avatar.jpg"]
           },
           "waterRate": {
             "type": "integer",
             "description": "User's water rate",
-            "examples": [
-              2000,
-              null
-            ]
+            "examples": [2000]
           }
         }
+      },
+      "UserSettings": {
+        "allOf": [
+          {
+            "schema": null,
+            "description": "User name",
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 32,
+                "examples": ["John Doe"]
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/User"
+          }
+        ]
       },
       "UpdateWaterRateRequest": {
         "type": "object",
-        "required": [
-          "waterRate"
-        ],
+        "required": ["waterRate"],
         "properties": {
           "waterRate": {
             "type": "integer",
+            "minimum": 1,
+            "maximum": 15000,
             "description": "User's water rate",
-            "examples": [
-              2000
-            ]
-          }
-        }
-      },
-      "UpdateWaterRateResponse": {
-        "type": "object",
-        "properties": {
-          "waterRate": {
-            "type": "integer",
-            "description": "User's water rate",
-            "examples": [
-              2000
-            ]
+            "examples": [2000]
           }
         }
       },
       "SignUpInRequest": {
         "type": "object",
-        "required": [
-          "email",
-          "password"
-        ],
+        "required": ["email", "password"],
         "properties": {
           "email": {
             "type": "string",
@@ -752,90 +806,29 @@
           },
           "password": {
             "type": "string",
+            "minLength": 8,
+            "maxLength": 64,
             "description": "User's password",
             "format": "password",
-            "examples": [
-              "qwerty123"
-            ]
-          }
-        }
-      },
-      "SignUpInResponse": {
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string",
-            "description": "Backend-generated unique identifier",
-            "examples": [
-              "346t7o5687g848eababc0c16"
-            ]
-          },
-          "token": {
-            "type": "string",
-            "description": "Bearer token",
-            "examples": [
-              "feJhbGciOiJIUzI1NiIsInR5cCI6IgtXVCJ4.eyJpZCI6IjY1OGQ3MTZiMGZiOGY0ZWE3MTgxYjE1ZCIsImlhdCI6MTcwMzc2OTM3OSwiZXhwIjoxNzA0Mzc0MTc3fQ.a0btrlNeqem40KjOgtWSPVscL9KNz8kIGlIHeh0Ersw"
-            ]
-          },
-          "user": {
-            "type": "object",
-            "properties": {
-              "email": {
-                "type": "string",
-                "description": "User's email",
-                "format": "email"
-              },
-              "avatarURL": {
-                "type": "string",
-                "description": "User avatar path",
-                "examples": [
-                  "avatars\\436abd4ceb7a0467af393b67_avatar.jpg"
-                ]
-              },
-              "waterRate": {
-                "type": "integer",
-                "description": "User's water rate",
-                "examples": [
-                  2000
-                ]
-              }
-            }
-          }
-        }
-      },
-      "AvatarsResponse": {
-        "type": "object",
-        "description": "User avatar file",
-        "properties": {
-          "avatarURL": {
-            "type": "string",
-            "description": "User avatar path",
-            "examples": [
-              "avatars\\436abd4ceb7a0467af393b67_avatar.jpg"
-            ]
+            "examples": ["qwerty123"]
           }
         }
       },
       "AddWaterRequest": {
         "type": "object",
-        "required": [
-          "waterVolume",
-          "date"
-        ],
+        "required": ["waterVolume", "date"],
         "properties": {
           "waterVolume": {
             "type": "integer",
+            "minimum": 1,
+            "maximum": 5000,
             "description": "The amount of water consumed at a time",
-            "examples": [
-              150
-            ]
+            "examples": [150]
           },
           "date": {
             "type": "string",
             "description": "Time of consumption",
-            "examples": [
-              "12:00"
-            ]
+            "examples": ["12:00"]
           }
         }
       },
@@ -843,75 +836,23 @@
         "type": "object",
         "oneOf": [
           {
-            "required": [
-              "waterVolume"
-            ]
+            "required": ["waterVolume"]
           },
           {
-            "required": [
-              "date"
-            ]
+            "required": ["date"]
           }
         ],
         "properties": {
           "waterVolume": {
             "type": "integer",
             "description": "The amount of water consumed at a time",
-            "examples": [
-              150
-            ]
+            "examples": [150]
           },
           "date": {
             "type": "string",
+            "format": "time",
             "description": "Time of consumption",
-            "examples": [
-              "12:00"
-            ]
-          }
-        }
-      },
-      "AddWaterResponse": {
-        "type": "object",
-        "properties": {
-          "waterVolume": {
-            "type": "integer",
-            "description": "The amount of water added to the database",
-            "examples": [
-              150
-            ]
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Time of consumption added",
-            "examples": [
-              "2023-12-29T15:12:15.000Z"
-            ]
-          },
-          "user": {
-            "type": "string",
-            "description": "User ID for reference",
-            "examples": [
-              "658c5398e3e9eefd204b132f"
-            ]
-          },
-          "_id": {
-            "type": "string",
-            "description": "Record ID",
-            "examples": [
-              "658eabae4f2cacdd1d946926"
-            ]
-          }
-        }
-      },
-      "DeleteWaterResponse": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "examples": [
-              "Record deleted"
-            ]
+            "examples": ["12:00"]
           }
         }
       }
