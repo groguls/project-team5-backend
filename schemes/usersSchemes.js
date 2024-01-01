@@ -28,9 +28,9 @@ const userSigninSchema = Joi.object({
 });
 
 const userSettingsSchema = Joi.object({
-  name: Joi.string().min(2).max(40).messages({
+  name: Joi.string().min(2).max(32).messages({
     "string.min": "Name must be at least 2 characters long",
-    "string.max": "Name must be max 40 characters long",
+    "string.max": "Name must be max 32 characters long",
   }),
   email: Joi.string().pattern(emailRegExp).messages({
     "string.pattern.base": "Invalid email format",

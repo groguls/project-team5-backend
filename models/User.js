@@ -10,7 +10,7 @@ const userSchema = new Schema(
     name: {
       type: String,
       minLength: [2, "Name must be at least 2 characters long"],
-      maxLength: [40, "Name must be max 40 characters long"],
+      maxLength: [32, "Name must be max 32 characters long"],
     },
     email: {
       type: String,
