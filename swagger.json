@@ -25,7 +25,7 @@
     }
   ],
   "paths": {
-    "/users/signup": {
+    "/api/users/signup": {
       "post": {
         "tags": ["Auth"],
         "summary": "User registration",
@@ -57,7 +57,7 @@
         }
       }
     },
-    "/users/signin": {
+    "/api/users/signin": {
       "post": {
         "tags": ["Auth"],
         "summary": "User login",
@@ -89,7 +89,7 @@
         }
       }
     },
-    "/users/logout": {
+    "/api/users/logout": {
       "post": {
         "tags": ["Auth"],
         "summary": "User logout",
@@ -112,7 +112,7 @@
         }
       }
     },
-    "/users/current": {
+    "/api/users/current": {
       "get": {
         "tags": ["User"],
         "summary": "Get information about the current user",
@@ -135,7 +135,7 @@
         }
       }
     },
-    "/users/avatars": {
+    "/api/users/avatars": {
       "patch": {
         "tags": ["User"],
         "summary": "Add or update user avatar",
@@ -179,7 +179,7 @@
         }
       }
     },
-    "/users/settings": {
+    "/api/users/settings": {
       "patch": {
         "tags": ["User"],
         "summary": "Update user's data",
@@ -216,7 +216,7 @@
         }
       }
     },
-    "/users/waterRate": {
+    "/api/users/waterRate": {
       "patch": {
         "tags": ["User"],
         "summary": "Update user's water data",
