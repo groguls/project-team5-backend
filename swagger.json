@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://watertracker-by-group5.onrender.com"
+      "url": "https://watertracker-by-group5.onrender.com/api"
     }
   ],
   "tags": [
@@ -25,7 +25,7 @@
     }
   ],
   "paths": {
-    "/api/users/signup": {
+    "/users/signup": {
       "post": {
         "tags": ["Auth"],
         "summary": "User registration",
@@ -57,7 +57,7 @@
         }
       }
     },
-    "/api/users/signin": {
+    "/users/signin": {
       "post": {
         "tags": ["Auth"],
         "summary": "User login",
@@ -89,7 +89,7 @@
         }
       }
     },
-    "/api/users/logout": {
+    "/users/logout": {
       "post": {
         "tags": ["Auth"],
         "summary": "User logout",
@@ -112,7 +112,7 @@
         }
       }
     },
-    "/api/users/current": {
+    "/users/current": {
       "get": {
         "tags": ["User"],
         "summary": "Get information about the current user",
@@ -135,7 +135,7 @@
         }
       }
     },
-    "/api/users/avatars": {
+    "/users/avatars": {
       "patch": {
         "tags": ["User"],
         "summary": "Add or update user avatar",
@@ -179,7 +179,7 @@
         }
       }
     },
-    "/api/users/settings": {
+    "/users/settings": {
       "patch": {
         "tags": ["User"],
         "summary": "Update user's data",
@@ -216,7 +216,7 @@
         }
       }
     },
-    "/api/users/waterRate": {
+    "/users/waterRate": {
       "patch": {
         "tags": ["User"],
         "summary": "Update user's water data",
@@ -253,7 +253,7 @@
         }
       }
     },
-    "/api/water": {
+    "/water": {
       "post": {
         "tags": ["Water"],
         "summary": "Add water consumption record",
@@ -311,7 +311,7 @@
         }
       }
     },
-    "/api/water/{month}": {
+    "/water/{month}": {
       "get": {
         "tags": ["Water"],
         "summary": "Get water records for requested month",
@@ -346,7 +346,7 @@
         }
       }
     },
-    "/api/water/{recordId}": {
+    "/water/{recordId}": {
       "patch": {
         "tags": ["Water"],
         "summary": "Edit water consumption record",
