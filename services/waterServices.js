@@ -82,7 +82,7 @@ const getTodayWaterService = async (user) => {
 
 const getMonthWaterService = async (user, date) => {
   const [year, month] = date.split("-").map(Number);
-  const startDate = startOfMonth(new Date(year, month - 1));
+  const startDate = startOfMonth(new Date(year, month));
   const endDate = endOfMonth(startDate);
 
   return await WaterNote.aggregate([
