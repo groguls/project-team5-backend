@@ -7,21 +7,24 @@ const {
   updateAvatar,
   settings,
   updateWaterRate,
-} = require("../controllers/usersControllers");
+  sendConfirmationEmail,
+  changePassword,
+} = require("../controllers");
 const { validateData } = require("../utils");
 const { authVerification, isEmptyBody, upload } = require("../middlewares");
 const {
-  userSignupSchema,
-  userSigninSchema,
+  userAuthSchema,
   userSettingsSchema,
   userUpdateWaterRateSchema,
-} = require("../schemes");
+  userConfirmationEmailSchema,
+  userChangePasswordSchema,
+} = require("../models");
 
 const authRouter = express.Router();
 
-authRouter.post("/signup", isEmptyBody, validateData(userSignupSchema), signup);
+authRouter.post("/signup", isEmptyBody, validateData(userAuthSchema), signup);
 
-authRouter.post("/signin", isEmptyBody, validateData(userSigninSchema), signin);
+authRouter.post("/signin", isEmptyBody, validateData(userAuthSchema), signin);
 
 authRouter.get("/current", authVerification, getCurrent);
 
@@ -46,6 +49,18 @@ authRouter.patch(
   authVerification,
   validateData(userUpdateWaterRateSchema),
   updateWaterRate
+);
+
+authRouter.post(
+  "/settings/forgotPassword",
+  validateData(userConfirmationEmailSchema),
+  sendConfirmationEmail
+);
+
+authRouter.patch(
+  "/settings/password/:id",
+  validateData(userChangePasswordSchema),
+  changePassword
 );
 
 module.exports = authRouter;

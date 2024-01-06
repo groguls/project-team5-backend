@@ -216,6 +216,76 @@
         }
       }
     },
+    "/users/settings/forgotPassword": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Send confirmation email",
+        "description": "Send confirmation email to reset user password",
+        "requestBody": {
+          "description": "Object with user's email",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ForgotPasswordResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/settings/password/{id}": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Change user password",
+        "description": "Change user password",
+        "requestBody": {
+          "description": "Object with user password",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "examples": ["7686106eb7f7cd644e96e297"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ChangePasswordResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
     "/users/waterRate": {
       "patch": {
         "tags": ["User"],
@@ -557,6 +627,38 @@
           }
         }
       },
+      "ForgotPasswordResponse": {
+        "description": "Confirmation email successfully sent",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "examples": ["Confirmation email sent"]
+                }
+              }
+            }
+          }
+        }
+      },
+      "ChangePasswordResponse": {
+        "description": "Change user password",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "examples": ["Password successfully changed"]
+                }
+              }
+            }
+          }
+        }
+      },
       "AvatarsResponse": {
         "description": "The user's avatar is updated",
         "content": {
@@ -804,6 +906,31 @@
             "description": "User's email",
             "format": "email"
           },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 64,
+            "description": "User's password",
+            "format": "password",
+            "examples": ["qwerty123"]
+          }
+        }
+      },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          }
+        }
+      },
+      "ChangePasswordRequest": {
+        "type": "object",
+        "required": ["password"],
+        "properties": {
           "password": {
             "type": "string",
             "minLength": 8,

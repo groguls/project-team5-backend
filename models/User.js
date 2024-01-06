@@ -46,6 +46,65 @@ userSchema.post("findOneAndUpdate", handleSaveError);
 
 const User = model("user", userSchema);
 
+const userAuthSchema = Joi.object({
+  email: Joi.string().pattern(emailRegExp).required().messages({
+    "any.required": "Missing required email field",
+    "string.pattern.base": "Invalid email format",
+  }),
+  password: Joi.string().min(8).max(64).required().messages({
+    "any.required": "Missing required password field",
+    "string.min": "Password must be at least 8 characters long",
+    "string.max": "Password must be max 64 characters long",
+  }),
+});
+
+const userSettingsSchema = Joi.object({
+  name: Joi.string().min(2).max(32).messages({
+    "string.min": "Name must be at least 2 characters long",
+    "string.max": "Name must be max 32 characters long",
+  }),
+  email: Joi.string().pattern(emailRegExp).messages({
+    "string.pattern.base": "Invalid email format",
+  }),
+  oldPassword: Joi.string().min(8).max(64).messages({
+    "string.min": "Password must be at least 8 characters long",
+    "string.max": "Password must be max 64 characters long",
+  }),
+  newPassword: Joi.string().min(8).max(64).messages({
+    "string.min": "Password must be at least 8 characters long",
+    "string.max": "Password must be max 64 characters long",
+  }),
+  gender: Joi.string().valid(...genderList),
+});
+
+const userUpdateWaterRateSchema = Joi.object({
+  waterRate: Joi.number().min(0).max(150000).required().messages({
+    "any.required": "Missing required waterRate field",
+    "number.min": "Values in the range 0 to 15000",
+    "number.max": "Values in the range 0 to 15000",
+  }),
+});
+
+const userConfirmationEmailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegExp).required().messages({
+    "any.required": "Missing required email field",
+    "string.pattern.base": "Invalid email format",
+  }),
+});
+
+const userChangePasswordSchema = Joi.object({
+  newPassword: Joi.string().required().min(8).max(64).messages({
+    "any.required": "Missing required password field",
+    "string.min": "Password must be at least 8 characters long",
+    "string.max": "Password must be max 64 characters long",
+  }),
+});
+
 module.exports = {
   User,
+  userAuthSchema,
+  userSettingsSchema,
+  userUpdateWaterRateSchema,
+  userConfirmationEmailSchema,
+  userChangePasswordSchema,
 };

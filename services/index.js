@@ -1,4 +1,14 @@
 const {
+  singupUserService,
+  singinUserService,
+  logoutUserService,
+  updateAvatarUserService,
+  settingsUserService,
+  updateWaterRateUserService,
+  sendConfirmationEmailService,
+  changePasswordService,
+} = require("./userServices");
+const {
   getTodayWaterService,
   getMonthWaterService,
   addWaterService,
@@ -7,6 +17,14 @@ const {
 } = require("./waterServices");
 
 module.exports = {
+  singupUserService,
+  singinUserService,
+  logoutUserService,
+  updateAvatarUserService,
+  settingsUserService,
+  updateWaterRateUserService,
+  sendConfirmationEmailService,
+  changePasswordService,
   getTodayWaterService,
   getMonthWaterService,
   addWaterService,
