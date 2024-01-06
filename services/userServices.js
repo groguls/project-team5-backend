@@ -128,9 +128,7 @@ const updateWaterRateUserService = async (id, waterRate) => {
 const sendConfirmationEmailService = async (email) => {
   const user = await User.findOne({ email });
 
-  if (!user) {
-    throw new HttpError(404, "User not found");
-  }
+  handleNotFoundId(user, email);
 
   sendConfirmationEmail(email, user._id);
 };
@@ -138,9 +136,7 @@ const sendConfirmationEmailService = async (email) => {
 const changePasswordService = async (id, newPassword) => {
   const user = await User.findById(id);
 
-  if (!user) {
-    throw new HttpError(404, "User not found");
-  }
+  handleNotFoundId(user, id);
 
   const hashPassword = await bcrypt.hash(newPassword, 10);
 
