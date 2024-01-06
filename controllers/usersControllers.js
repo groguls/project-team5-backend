@@ -1,139 +1,111 @@
-const bcrypt = require("bcryptjs");
-const path = require("path");
-const Jimp = require("jimp");
-const fs = require("fs/promises");
-const { User } = require("../models/index.js");
-const { HttpError, decorateConrtoller } = require("../utils/index.js");
-const createUserToken = require("../helpers/createUserToken.js");
+const {
+  singupUserService,
+  singinUserService,
+  logoutUserService,
+  updateAvatarUserService,
+  settingsUserService,
+  updateWaterRateUserService,
+  sendConfirmationEmailService,
+  changePasswordService,
+} = require("../services");
+const { decorateConrtoller } = require("../utils");
 
-const signup = async (req, res) => {
-  const { email, password } = req.body;
-
-  const user = await User.findOne({ email });
-
-  if (user) {
-    throw new HttpError(409, "Email in use");
-  }
-
-  const hashPassword = await bcrypt.hash(password, 10);
-  const avatarURL = "";
-
-  const newUser = await User.create({
-    ...req.body,
-    password: hashPassword,
-    avatarURL,
-  });
-
-  const { _id, waterRate } = await User.findOne({ email });
-
-  const token = createUserToken(_id);
-
-  await User.findByIdAndUpdate(_id, { token });
+const signup = decorateConrtoller(async (req, res) => {
+  const { token, user } = await singupUserService(req.body);
+  const { email, avatarURL, waterRate } = user;
 
   res.status(201).json({
     token,
     user: {
-      email: newUser.email,
+      email,
       avatarURL,
       waterRate,
     },
   });
-};
+});
 
-const signin = async (req, res) => {
-  const { email, password } = req.body;
-
-  const user = await User.findOne({ email });
-
-  if (!user) {
-    throw new HttpError(401, "Email or password is wrong");
-  }
-
-  const passwordCompare = await bcrypt.compare(password, user.password);
-
-  if (!passwordCompare) {
-    throw new HttpError(401, "Email or password is wrong");
-  }
-
-  const token = createUserToken(user._id);
-
-  await User.findByIdAndUpdate(user._id, { token });
+const signin = decorateConrtoller(async (req, res) => {
+  const { token, user } = await singinUserService(req.body);
+  const { email, avatarURL, waterRate } = user;
 
   res.json({
     token,
     user: {
       email,
-      avatarURL: user.avatarURL,
-      waterRate: user.waterRate,
+      avatarURL,
+      waterRate,
     },
   });
-};
+});
 
 const getCurrent = (req, res) => {
-  const { email, avatarURL, waterRate } = req.user;
+  const { email, name, avatarURL, waterRate } = req.user;
 
-  res.json({ email, avatarURL, waterRate });
+  res.json({ email, name, avatarURL, waterRate });
 };
 
-const logout = async (req, res) => {
+const logout = decorateConrtoller(async (req, res) => {
   const { _id } = req.user;
 
-  await User.findByIdAndUpdate(_id, { token: "" });
+  await logoutUserService(_id);
 
   res.status(204).send();
-};
+});
 
-const updateAvatar = async (req, res) => {
-  if (!req.file) {
-    throw new HttpError(400, "missing required avatarURL");
-  }
-
-  const { _id } = req.user;
-  const { path: oldPath, filename } = req.file;
-
-  await Jimp.read(oldPath)
-    .then((file) => {
-      return file.resize(80, 80).write(oldPath);
-    })
-    .catch((error) => console.log(error.message));
-
-  const avatarPath = path.resolve("public", "avatars");
-  const newPath = path.join(avatarPath, filename);
-
-  await fs.rename(oldPath, newPath);
-
-  const avatarURL = path.join("avatars", filename);
-
-  await User.findByIdAndUpdate(_id, { avatarURL });
+const updateAvatar = decorateConrtoller(async (req, res) => {
+  const { file, user } = req;
+  const avatarURL = await updateAvatarUserService(user._id, file);
 
   res.json({
     avatarURL,
   });
-};
+});
 
-const settings = async (req, res) => {
-  const { body, user } = req;
-
-  const updatedUser = await User.findByIdAndUpdate(user._id, body);
+const settings = decorateConrtoller(async (req, res) => {
+  const { user, body } = req;
+  const updatedUser = await settingsUserService(user, body);
 
   res.json(updatedUser);
-};
+});
 
-const updateWaterRate = async (req, res) => {
+const updateWaterRate = decorateConrtoller(async (req, res) => {
   const { _id } = req.user;
   const { waterRate } = req.body;
 
-  await User.findByIdAndUpdate(_id, { waterRate });
+  await updateWaterRateUserService(_id, waterRate);
 
   res.json({ waterRate });
-};
+});
+
+const sendConfirmationEmail = decorateConrtoller(async (req, res) => {
+  const { email } = req.body;
+
+  await sendConfirmationEmailService(email);
+
+  res.json({
+    message: "Confirmation email sent",
+  });
+});
+
+const changePassword = decorateConrtoller(async (req, res) => {
+  const { id } = req.params;
+  const { newPassword } = req.body;
+
+  await changePasswordService(id, newPassword);
+
+  res.json({
+    message: "Password successfully changed",
+  });
+});
 
 module.exports = {
-  signup: decorateConrtoller(signup),
-  signin: decorateConrtoller(signin),
-  getCurrent: decorateConrtoller(getCurrent),
-  logout: decorateConrtoller(logout),
-  updateAvatar: decorateConrtoller(updateAvatar),
-  settings: decorateConrtoller(settings),
-  updateWaterRate: decorateConrtoller(updateWaterRate),
+  signup,
+  signin,
+  getCurrent,
+  logout,
+  updateAvatar,
+  settings,
+  updateWaterRate,
+  sendConfirmationEmail,
+  changePassword,
 };

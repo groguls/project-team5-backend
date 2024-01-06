@@ -1,5 +1,5 @@
-const { Schema, model } = require("mongoose");
 const Joi = require("joi");
+const { Schema, model } = require("mongoose");
 const { preUpdateHook } = require("./hooks");
 
 const waterSchema = new Schema(
