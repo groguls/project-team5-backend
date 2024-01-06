@@ -64,8 +64,9 @@ const updateAvatar = decorateConrtoller(async (req, res) => {
 const settings = decorateConrtoller(async (req, res) => {
   const { user, body } = req;
   const updatedUser = await settingsUserService(user, body);
+  const { name, email, gender, avatarURL, waterRate } = updatedUser;
 
-  res.json(updatedUser);
+  res.json({ name, email, gender, avatarURL, waterRate });
 });
 
 const updateWaterRate = decorateConrtoller(async (req, res) => {
