@@ -39,9 +39,9 @@ const signin = decorateConrtoller(async (req, res) => {
 });
 
 const getCurrent = (req, res) => {
-  const { email, name, avatarURL, waterRate } = req.user;
+  const { name, email, gender, avatarURL, waterRate } = req.user;
 
-  res.json({ email, name, avatarURL, waterRate });
+  res.json({ name, email, gender, avatarURL, waterRate });
 };
 
 const logout = decorateConrtoller(async (req, res) => {
