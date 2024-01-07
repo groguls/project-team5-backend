@@ -395,7 +395,7 @@
           {
             "name": "month",
             "in": "path",
-            "description": "YYYY-MM",
+            "description": "YYYY-MM (2024-01 or 2023-12)",
             "required": true,
             "schema": {
               "type": "string",
@@ -733,53 +733,50 @@
           "application/json": {
             "schema": {
               "description": "Records of water consumption for the user for today",
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "userId": {
-                    "type": "string",
-                    "description": "User ID",
-                    "examples": ["658c5398e3e9eefd204b132f"]
-                  },
-                  "date": {
-                    "type": "string",
-                    "format": "date",
-                    "description": "The date for which the data was selected",
-                    "examples": ["2023-12-29T00:00:00.000Z"]
-                  },
-                  "dailyWaterRate": {
-                    "type": "integer",
-                    "description": "User's water rate in ml",
-                    "examples": [2000]
-                  },
-                  "percentage": {
-                    "type": "string",
-                    "description": "Percentage of fulfillment of the daily consumption rate",
-                    "examples": ["49%"]
-                  },
-                  "waterRecords": {
-                    "type": "array",
-                    "description": "List of records for today",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "_id": {
-                          "type": "string",
-                          "description": "Record ID",
-                          "examples": ["658eabae4f2cacdd1d946926"]
-                        },
-                        "waterVolume": {
-                          "type": "integer",
-                          "description": "The amount of water consumed in ml",
-                          "examples": [150]
-                        },
-                        "time": {
-                          "type": "string",
-                          "format": "time",
-                          "description": "Time of consumption",
-                          "examples": ["12:00"]
-                        }
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "description": "User ID",
+                  "examples": ["658c5398e3e9eefd204b132f"]
+                },
+                "date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "The date for which the data was selected",
+                  "examples": ["2023-12-29T00:00:00.000Z"]
+                },
+                "dailyWaterRate": {
+                  "type": "integer",
+                  "description": "User's water rate in ml",
+                  "examples": [2000]
+                },
+                "percentage": {
+                  "type": "string",
+                  "description": "Percentage of fulfillment of the daily consumption rate",
+                  "examples": ["49%"]
+                },
+                "waterRecords": {
+                  "type": "array",
+                  "description": "List of records for today",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "description": "Record ID",
+                        "examples": ["658eabae4f2cacdd1d946926"]
+                      },
+                      "waterVolume": {
+                        "type": "integer",
+                        "description": "The amount of water consumed in ml",
+                        "examples": [150]
+                      },
+                      "time": {
+                        "type": "string",
+                        "format": "time",
+                        "description": "Time of consumption",
+                        "examples": ["12:00"]
                       }
                     }
                   }
