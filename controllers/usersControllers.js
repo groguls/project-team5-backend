@@ -26,12 +26,14 @@ const signup = decorateConrtoller(async (req, res) => {
 
 const signin = decorateConrtoller(async (req, res) => {
   const { token, user } = await singinUserService(req.body);
-  const { email, avatarURL, waterRate } = user;
+  const { name, email, gender, avatarURL, waterRate } = user;
 
   res.json({
     token,
     user: {
+      name,
       email,
+      gender,
       avatarURL,
       waterRate,
     },
