@@ -14,7 +14,7 @@ const getTodayWaterService = async (user) => {
   const todayStart = startOfDay(today);
   const todayEnd = endOfDay(today);
 
-  return await WaterNote.aggregate([
+  const [data] = await WaterNote.aggregate([
     {
       $match: {
         user,
@@ -78,12 +78,16 @@ const getTodayWaterService = async (user) => {
       },
     },
   ]);
+
+  return data;
 };
 
 const getMonthWaterService = async (user, date) => {
   const [year, month] = date.split("-").map(Number);
-  const startDate = startOfMonth(new Date(year, month));
+  const startDate = startOfMonth(new Date(year, month - 1));
   const endDate = endOfMonth(startDate);
+
+  console.log(startDate);
 
   return await WaterNote.aggregate([
     {

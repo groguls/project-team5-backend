@@ -26,19 +26,20 @@ const waterSchema = new Schema(
 waterSchema.pre("findOneAndUpdate", preUpdateHook);
 
 const addWaterSchema = Joi.object({
-  waterVolume: Joi.number().integer().positive().max(5000).required().messages({
+  waterVolume: Joi.number().integer().positive().max(5000).messages({
     "any.required": "missing required {#label} field",
     positive: "positive values between 1 and 5000 are allowed",
     max: "positive values between 1 and 5000 are allowed",
   }),
   date: Joi.string()
     .regex(/^\d{2}:\d{2}$/)
-    .required()
     .messages({
       "any.required": "missing required {#label} field",
       "string.pattern.base": "Invalid time format. 'HH:mm' expected",
     }),
-}).and("waterVolume", "date");
+})
+  .min(2)
+  .and("waterVolume", "date");
 
 const editWaterSchema = Joi.object({
   waterVolume: addWaterSchema.extract("waterVolume"),
