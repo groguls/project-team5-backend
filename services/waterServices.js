@@ -44,8 +44,9 @@ const getTodayWaterService = async (user) => {
         waterRecords: {
           $push: {
             _id: "$_id",
+            user: "$user._id",
             waterVolume: "$waterVolume",
-            time: { $dateToString: { format: "%H:%M", date: "$date" } },
+            date: "$date",
           },
         },
       },

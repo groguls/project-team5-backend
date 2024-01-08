@@ -699,30 +699,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "type": "object",
-              "properties": {
-                "waterVolume": {
-                  "type": "integer",
-                  "description": "The amount of water added to the database",
-                  "examples": [150]
-                },
-                "date": {
-                  "type": "string",
-                  "format": "date-time",
-                  "description": "Time of consumption added",
-                  "examples": ["2023-12-29T15:12:15.000Z"]
-                },
-                "user": {
-                  "type": "string",
-                  "description": "User ID for reference",
-                  "examples": ["658c5398e3e9eefd204b132f"]
-                },
-                "_id": {
-                  "type": "string",
-                  "description": "Record ID",
-                  "examples": ["658eabae4f2cacdd1d946926"]
-                }
-              }
+              "$ref": "#/components/schemas/AddEditWaterSchema"
             }
           }
         }
@@ -760,25 +737,8 @@
                   "type": "array",
                   "description": "List of records for today",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "_id": {
-                        "type": "string",
-                        "description": "Record ID",
-                        "examples": ["658eabae4f2cacdd1d946926"]
-                      },
-                      "waterVolume": {
-                        "type": "integer",
-                        "description": "The amount of water consumed in ml",
-                        "examples": [150]
-                      },
-                      "time": {
-                        "type": "string",
-                        "format": "time",
-                        "description": "Time of consumption",
-                        "examples": ["12:00"]
-                      }
-                    }
+                    "schema": null,
+                    "$ref": "#/components/schemas/AddEditWaterSchema"
                   }
                 }
               }
@@ -935,6 +895,32 @@
             "description": "User's password",
             "format": "password",
             "examples": ["qwerty123"]
+          }
+        }
+      },
+      "AddEditWaterSchema": {
+        "type": "object",
+        "properties": {
+          "waterVolume": {
+            "type": "integer",
+            "description": "The amount of water added to the database",
+            "examples": [150]
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Time of consumption added",
+            "examples": ["2023-12-29T15:12:15.000Z"]
+          },
+          "user": {
+            "type": "string",
+            "description": "User ID for reference",
+            "examples": ["658c5398e3e9eefd204b132f"]
+          },
+          "_id": {
+            "type": "string",
+            "description": "Record ID",
+            "examples": ["658eabae4f2cacdd1d946926"]
           }
         }
       },
