@@ -43,7 +43,7 @@
         },
         "responses": {
           "201": {
-            "$ref": "#/components/responses/SignUpInResponse"
+            "$ref": "#/components/responses/SignUpResponse"
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
@@ -75,7 +75,7 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/SignUpInResponse"
+            "$ref": "#/components/responses/SignInResponse"
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
@@ -194,7 +194,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserSettings"
+                "$ref": "#/components/schemas/UserSettingsRequest"
               }
             }
           },
@@ -580,8 +580,54 @@
           }
         }
       },
-      "SignUpInResponse": {
-        "description": "User successfully registered/logged in",
+      "SignUpResponse": {
+        "description": "User successfully registered",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "Backend-generated unique identifier",
+                  "examples": ["346t7o5687g848eababc0c16"]
+                },
+                "token": {
+                  "type": "string",
+                  "description": "Bearer token",
+                  "examples": [
+                    "feJhbGciOiJIUzI1NiIsInR5cCI6IgtXVCJ4.eyJpZCI6IjY1OGQ3MTZiMGZiOGY0ZWE3MTgxYjE1ZCIsImlhdCI6MTcwMzc2OTM3OSwiZXhwIjoxNzA0Mzc0MTc3fQ.a0btrlNeqem40KjOgtWSPVscL9KNz8kIGlIHeh0Ersw"
+                  ]
+                },
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "description": "User's email",
+                      "format": "email"
+                    },
+                    "avatarURL": {
+                      "type": "string",
+                      "description": "User avatar path",
+                      "examples": [
+                        "avatars\\436abd4ceb7a0467af393b67_avatar.jpg"
+                      ]
+                    },
+                    "waterRate": {
+                      "type": "integer",
+                      "description": "User's water rate",
+                      "examples": [2000]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "SignInResponse": {
+        "description": "User successfully logged in",
         "content": {
           "application/json": {
             "schema": {
@@ -622,7 +668,25 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/UserSettings"
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 32,
+                  "examples": ["John Doe"]
+                },
+                "email": {
+                  "type": "string",
+                  "description": "User's email",
+                  "format": "email"
+                },
+                "gender": {
+                  "type": "string",
+                  "description": "Gender of the user",
+                  "examples": ["man", "girl"]
+                }
+              }
             }
           }
         }
@@ -849,6 +913,17 @@
             "description": "User's email",
             "format": "email"
           },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 32,
+            "examples": ["John Doe"]
+          },
+          "gender": {
+            "type": "string",
+            "description": "Gender of the user",
+            "examples": ["man", "girl"]
+          },
           "avatarURL": {
             "type": "string",
             "description": "User avatar path",
@@ -861,7 +936,7 @@
           }
         }
       },
-      "UserSettings": {
+      "UserSettingsRequest": {
         "allOf": [
           {
             "schema": null,
@@ -873,11 +948,35 @@
                 "minLength": 2,
                 "maxLength": 32,
                 "examples": ["John Doe"]
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "gender": {
+                "type": "string",
+                "description": "Gender of the user",
+                "enum": ["man", "girl"],
+                "examples": ["man", "girl"]
+              },
+              "oldPassword": {
+                "type": "string",
+                "minLength": 8,
+                "maxLength": 64,
+                "description": "Outdated user's password",
+                "format": "password",
+                "examples": ["qwerty123"]
+              },
+              "newPassword": {
+                "type": "string",
+                "minLength": 8,
+                "maxLength": 64,
+                "description": "New user's password",
+                "format": "password",
+                "examples": ["qwerty12345"]
               }
             }
-          },
-          {
-            "$ref": "#/components/schemas/User"
           }
         ]
       },

@@ -58,7 +58,7 @@ authRouter.post(
 );
 
 authRouter.patch(
-  "/settings/password/:id",
+  "/settings/password/:confirmationToken",
   validateData(userChangePasswordSchema),
   changePassword
 );

@@ -36,6 +36,7 @@ const userSchema = new Schema(
       max: [15000, "Values in the range 0 to 15000"],
       default: 2000,
     },
+    tempConfirmationToken: { type: String, default: null },
   },
   { versionKey: false }
 );

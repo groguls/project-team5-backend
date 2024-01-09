@@ -65,10 +65,14 @@ const updateAvatar = decorateConrtoller(async (req, res) => {
 
 const settings = decorateConrtoller(async (req, res) => {
   const { user, body } = req;
-  const updatedUser = await settingsUserService(user, body);
-  const { name, email, gender, avatarURL, waterRate } = updatedUser;
 
-  res.json({ name, email, gender, avatarURL, waterRate });
+  await settingsUserService(user, body);
+
+  if (body.password) {
+    delete body.password;
+  }
+
+  res.json({ ...body });
 });
 
 const updateWaterRate = decorateConrtoller(async (req, res) => {
@@ -91,10 +95,10 @@ const sendConfirmationEmail = decorateConrtoller(async (req, res) => {
 });
 
 const changePassword = decorateConrtoller(async (req, res) => {
-  const { id } = req.params;
+  const { confirmationToken } = req.params;
   const { newPassword } = req.body;
 
-  await changePasswordService(id, newPassword);
+  await changePasswordService(confirmationToken, newPassword);
 
   res.json({
     message: "Password successfully changed",
