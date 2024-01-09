@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.41.2",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "date-fns": "^3.0.6",

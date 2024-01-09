@@ -1,14 +1,18 @@
 const bcrypt = require("bcryptjs");
-const path = require("path");
 const Jimp = require("jimp");
 const fs = require("fs/promises");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 const { User } = require("../models");
 const {
   HttpError,
   createUserToken,
   sendConfirmationEmail,
   handleNotFoundId,
+  cloudinary,
 } = require("../utils");
+
+const { JWT_SECRET } = process.env;
 
 const singupUserService = async (credentials) => {
   const { email, password } = credentials;
@@ -27,7 +31,7 @@ const singupUserService = async (credentials) => {
     avatarURL,
   });
 
-  const token = createUserToken(newUser._id);
+  const token = createUserToken(newUser._id, "7d");
   newUser.token = token;
   newUser.save();
 
@@ -51,7 +55,7 @@ const singinUserService = async (credentials) => {
     throw new HttpError(401, "Email or password is wrong");
   }
 
-  const token = createUserToken(user._id);
+  const token = createUserToken(user._id, "7d");
   user.token = token;
   user.save();
 
@@ -70,20 +74,19 @@ const updateAvatarUserService = async (id, file) => {
     throw new HttpError(400, "Missing required avatarURL");
   }
 
-  const { path: oldPath, filename } = file;
+  const { path } = file;
 
-  await Jimp.read(oldPath)
+  await Jimp.read(file.path)
     .then((file) => {
-      return file.resize(80, 80).write(oldPath);
+      return file.resize(80, 80).write(path);
     })
     .catch((error) => console.log(error.message));
 
-  const avatarPath = path.resolve("public", "avatars");
-  const newPath = path.join(avatarPath, filename);
+  const { url: avatarURL } = await cloudinary.uploader.upload(path, {
+    folder: "avatars",
+  });
 
-  await fs.rename(oldPath, newPath);
-
-  const avatarURL = path.join("avatars", filename);
+  await fs.unlink(path);
 
   await User.findByIdAndUpdate(id, { avatarURL });
 
@@ -131,17 +134,35 @@ const sendConfirmationEmailService = async (email) => {
 
   handleNotFoundId(user, email);
 
-  sendConfirmationEmail(email, user._id);
+  const confirmationToken = createUserToken(user._id, "15m");
+  user.tempConfirmationToken = confirmationToken;
+  user.save();
+
+  sendConfirmationEmail(email, confirmationToken);
 };
 
-const changePasswordService = async (id, newPassword) => {
-  const user = await User.findById(id);
+const changePasswordService = async (tempConfirmationToken, newPassword) => {
+  const user = await User.findOne({ tempConfirmationToken });
 
-  handleNotFoundId(user, id);
+  if (!user) {
+    throw new HttpError(400, "Confirmation token is invalid");
+  }
+
+  try {
+    const { id } = jwt.verify(tempConfirmationToken, JWT_SECRET);
+    const user = await User.findById(id);
+
+    if (!user || user.tempConfirmationToken !== tempConfirmationToken) {
+      new HttpError(400, "Confirmation token invalid");
+    }
+  } catch (err) {
+    throw new HttpError(400, "Confirmation token is invalid");
+  }
 
   const hashPassword = await bcrypt.hash(newPassword, 10);
 
   user.password = hashPassword;
+  user.tempConfirmationToken = null;
   user.save();
 };
 

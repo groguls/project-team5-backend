@@ -3,12 +3,12 @@ require("dotenv").config();
 
 const { JWT_SECRET } = process.env;
 
-const createUserToken = (id) => {
+const createUserToken = (id, expiresIn) => {
   const payload = {
     id,
   };
 
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
+  return jwt.sign(payload, JWT_SECRET, { expiresIn });
 };
 
 module.exports = createUserToken;

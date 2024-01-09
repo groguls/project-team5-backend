@@ -5,6 +5,7 @@ const validateData = require("./validateData");
 const sendEmail = require("./sendEmail");
 const sendConfirmationEmail = require("./sendConfirmationEmail");
 const createUserToken = require("./createUserToken");
+const cloudinary = require("./cloudinary");
 
 module.exports = {
   HttpError,
@@ -14,4 +15,5 @@ module.exports = {
   sendEmail,
   sendConfirmationEmail,
   createUserToken,
+  cloudinary,
 };
