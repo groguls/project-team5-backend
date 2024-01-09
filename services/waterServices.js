@@ -6,7 +6,7 @@ const {
   startOfMonth,
   endOfMonth,
 } = require("date-fns");
-const { WaterNote, User } = require("../models");
+const { WaterNote } = require("../models");
 const { handleNotFoundId } = require("../utils");
 
 const getTodayWaterService = async (user) => {
