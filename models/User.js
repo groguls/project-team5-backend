@@ -11,6 +11,7 @@ const userSchema = new Schema(
       type: String,
       minLength: [2, "Name must be at least 2 characters long"],
       maxLength: [32, "Name must be max 32 characters long"],
+      default: null,
     },
     email: {
       type: String,
@@ -27,6 +28,7 @@ const userSchema = new Schema(
     gender: {
       type: String,
       enum: genderList,
+      default: null,
     },
     token: { type: String, default: null },
     avatarURL: { type: String },
