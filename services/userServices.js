@@ -12,7 +12,7 @@ const {
   cloudinary,
 } = require("../utils");
 
-const { JWT_SECRET, CLOUDINARY_API_KEY } = process.env;
+const { JWT_SECRET } = process.env;
 
 const singupUserService = async (credentials) => {
   const { email, password } = credentials;
