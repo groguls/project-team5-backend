@@ -82,7 +82,7 @@ const updateAvatarUserService = async (id, file) => {
     })
     .catch((error) => console.log(error.message));
 
-  const { url: avatarURL } = await cloudinary.uploader.upload(path, {
+  const { secure_url: avatarURL } = await cloudinary.uploader.upload(path, {
     folder: "avatars",
   });
 
