@@ -1,5 +1,4 @@
 const bcrypt = require("bcryptjs");
-const Jimp = require("jimp");
 const fs = require("fs/promises");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -76,14 +75,10 @@ const updateAvatarUserService = async (id, file) => {
 
   const { path } = file;
 
-  await Jimp.read(file.path)
-    .then((file) => {
-      return file.resize(80, 80).write(path);
-    })
-    .catch((error) => console.log(error.message));
-
   const { secure_url: avatarURL } = await cloudinary.uploader.upload(path, {
     folder: "avatars",
+    width: 80,
+    height: 80,
   });
 
   await fs.unlink(path);
