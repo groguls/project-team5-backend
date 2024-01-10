@@ -1,7 +1,6 @@
 const bcrypt = require("bcryptjs");
 const fs = require("fs/promises");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 const { User } = require("../models");
 const {
   HttpError,
@@ -10,6 +9,7 @@ const {
   handleNotFoundId,
   cloudinary,
 } = require("../utils");
+require("dotenv").config();
 
 const { JWT_SECRET } = process.env;
 

@@ -245,7 +245,7 @@
         }
       }
     },
-    "/settings/password/{id}": {
+    "/settings/password/{confirmationToken}": {
       "patch": {
         "tags": ["User"],
         "summary": "Change user password",
@@ -263,13 +263,15 @@
         },
         "parameters": [
           {
-            "name": "id",
+            "name": "confirmationToken",
             "in": "path",
-            "description": "User id",
+            "description": "Backend-generated temporary confirmation token",
             "required": true,
             "schema": {
               "type": "string",
-              "examples": ["7686106eb7f7cd644e96e297"]
+              "examples": [
+                "eyJhbGcyOiJIUzI1NjIsInR5cCI6IkyXVCJ9.eyJpZCI6IjY1OWQ4MjJtMWUxNmY0OWU3OGUzMmRhNiIsImltdCI6MTcwNDg4MgkwNCwiZXhwIjyxNzA0ODg0NzA0fQ._xr5bg4awDP8I45DffBtjjFbmoeBNTAc1nh4Tlehd6U"
+              ]
             }
           }
         ],
@@ -611,7 +613,7 @@
                       "type": "string",
                       "description": "User avatar path",
                       "examples": [
-                        "avatars\\436abd4ceb7a0467af393b67_avatar.jpg"
+                        "https://res.cloudinary.com/jnvx0wvup/image/upload/v1504876552/avatars/hunimn4wxhgsvkdwjs8w.lpg"
                       ]
                     },
                     "waterRate": {
@@ -734,7 +736,9 @@
                 "avatarURL": {
                   "type": "string",
                   "description": "User avatar path",
-                  "examples": ["avatars\\436abd4ceb7a0467af393b67_avatar.jpg"]
+                  "examples": [
+                    "https://res.cloudinary.com/jnvx0wvup/image/upload/v1504876552/avatars/hunimn4wxhgsvkdwjs8w.lpg"
+                  ]
                 }
               }
             }
@@ -887,7 +891,9 @@
           "avatarURL": {
             "type": "string",
             "description": "User avatar path",
-            "examples": ["avatars\\436abd4ceb7a0467af393b67_avatar.jpg"]
+            "examples": [
+              "https://res.cloudinary.com/jnvx0wvup/image/upload/v1504876552/avatars/hunimn4wxhgsvkdwjs8w.lpg"
+            ]
           },
           "waterRate": {
             "type": "integer",
